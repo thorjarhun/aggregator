@@ -8,13 +8,11 @@ const makeRequest = (query, onData, onComplete) => {
     var charactersRead = 0;
     return event => {
       var data = event.currentTarget.response.slice(charactersRead);
-      if (charactersRead) {
-        // If anything but the first chunk
+      if (charactersRead) {         // If anything but the first chunk
         data = '[' + data.slice(1);
       }
       charactersRead += data.length;
-      if (data.slice(-1) !== ']') {
-        // If anything but the last chunk
+      if (data.slice(-1) !== ']') { // If anything but the last chunk
         data = data + ']';
       }
       onData(JSON.parse(data));
