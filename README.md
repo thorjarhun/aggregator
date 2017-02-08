@@ -8,4 +8,6 @@ npm install
 node server.js
 ```
 
+[Live demo](https://pacific-springs-70424.herokuapp.com/)
+
 While a lightweight UI is included, it may be more obvious to observe what is meant above by the term "streaming" by opening a browser console and entering `makeRequest('cats', onData, onComplete)`.
