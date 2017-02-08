@@ -1,6 +1,6 @@
 # Aggregator
 
-The project is meant to be a minimalistic streaming JSON API aggregation service. While websockets would be trivial to implement and work great for this use-case, this project explores the management of asynchronous IO with node streams.
+This is a proof of concept for a minimalistic streaming JSON API aggregation service. While websockets would be trivial to implement and work great for this use-case, this project explores means of streaming a regular HTTP response such that the client can process the payload progressively. While the `master` branch implementation uses node streams, the `early_version` branch chunks the response in a more vanilla flavor.
 
 ## Usage:
 ```
