@@ -11,10 +11,10 @@ const makeRequest = (query, onData, onComplete) => {
       if (charactersRead) {         // If anything but the first chunk
         data = '[' + data.slice(1);
       }
-      charactersRead += data.length;
       if (data.slice(-1) !== ']') { // If anything but the last chunk
-        data = data + ']';
+        data = data.slice(0, -1) + ']';
       }
+      charactersRead += data.length - 1;
       onData(JSON.parse(data));
     };
   })();

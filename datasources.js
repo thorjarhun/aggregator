@@ -10,49 +10,54 @@ module.exports = [
   { // This source isn't very robot friendly.
     id: 'gigablast',
     url: 'http://www.gigablast.com/search?format=json&rxivo=1&q=',
-    parser: () => es.pipeline(
-      JSONStream.parse('results.*'),
-      es.mapSync(({url, title: text}) => ({url, text}))
-    )
+    formatter: body => {
+      return JSON.parse(body).results.map(({url, title: text}) => ({
+        url,
+        text
+      }));
+    }
   },
   {
     id: 'youtube',
     url: `https://www.googleapis.com/youtube/v3/search?part=snippet&key=${youtubeKey}&q=`,
-    parser: () => es.pipeline(
-      JSONStream.parse('items.*'),
-      es.mapSync(item => ({
-        url: `https://www.youtube.com/watch?v=${item.id.videoId}`,
-        text: item.snippet.title
-      }))
-    )
+    formatter: body => {
+      return JSON.parse(body).items.map(result => ({
+        url: `https://www.youtube.com/watch?v=${result.id.videoId}`,
+        text: result.snippet.title
+      }));
+    }
+
   },
+  /*
   { // This source has a pretty low daily request limit.
     id: 'google',
     url: `https://www.googleapis.com/customsearch/v1?key=${googleKey}&cx=${googleSearchEngineId}&q=`,
-    parser: () => es.pipeline(
-    //  es.mapSync(x => (console.log('google', x.toString()), x)),
-      JSONStream.parse('items.*'),
-      es.mapSync(({link: url, title: text}) => ({url, text}))
-    )
+    formatter: body => {
+      return JSON.parse(body).items.map(({link: url, title: text}) => ({
+        url,
+        text
+      }));
+    }
   },
+  */
   { // This source has a low rate limit.
     id: 'github',
     url: 'https://api.github.com/search/repositories?q=',
-    parser: () => es.pipeline(
-    //  es.mapSync(x => (console.log('github', x.toString()), x)),
-      JSONStream.parse('items.*'),
-      es.mapSync(({html_url: url, full_name: text}) => ({url, text}))
-    )
+    formatter: body => {
+      return JSON.parse(body).items.map(({html_url: url, full_name: text}) => ({
+        url,
+        text
+      }));
+    }
   },
   {
     id: 'themoviedb',
     url: `https://api.themoviedb.org/3/search/movie?api_key=${themoviedbKey}&query=`,
-    parser: () => es.pipeline(
-      JSONStream.parse('results.*'),
-      es.mapSync(({id, title: text}) => ({
+    formatter: body => {
+      return JSON.parse(body).results.map(({id, title: text}) => ({
         url: `https://www.themoviedb.org/movie/${id}`,
         text
-      }))
-    )
+      }));
+    }
   }
 ];
